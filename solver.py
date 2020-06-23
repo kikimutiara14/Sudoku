@@ -74,7 +74,3 @@ def find_empty(bo):
 
     return None
 
-print_board(board)
-print()
-solve(board)
-print_board(board)
