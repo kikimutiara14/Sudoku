@@ -1,29 +1,19 @@
 # GUI.py
 import pygame
 from solver import solve, valid
+from generator import generate
 import time
 pygame.font.init()
 
 
 class Grid:
-    board = [
-        [7, 8, 0, 4, 0, 0, 1, 2, 0],
-        [6, 0, 0, 0, 7, 5, 0, 0, 9],
-        [0, 0, 0, 6, 0, 1, 0, 7, 8],
-        [0, 0, 7, 0, 4, 0, 2, 6, 0],
-        [0, 0, 1, 0, 5, 0, 9, 3, 0],
-        [9, 0, 4, 0, 6, 0, 0, 0, 5],
-        [0, 7, 0, 3, 0, 0, 0, 1, 2],
-        [1, 2, 0, 0, 0, 7, 4, 0, 0],
-        [0, 4, 9, 2, 0, 6, 0, 0, 7]
-    ]
-
-    def __init__(self, rows, cols, width, height):
-        self.rows = rows
-        self.cols = cols
-        self.cubes = [[Cube(self.board[i][j], i, j, width, height) for j in range(cols)] for i in range(rows)]
-        self.width = width
-        self.height = height
+    def __init__(self, difficulty):
+        board = generate(difficulty)
+        self.rows = 9
+        self.cols = 9
+        self.cubes = [[Cube(board[i][j], i, j, 540, 540) for j in range(9)] for i in range(9)]
+        self.width = 540
+        self.height = 540
         self.model = None
         self.selected = None
 
@@ -161,7 +151,7 @@ def format_time(secs):
 def main():
     win = pygame.display.set_mode((540,600))
     pygame.display.set_caption("Sudoku")
-    board = Grid(9, 9, 540, 540)
+    board = Grid('hard')
     key = None
     run = True
     start = time.time()
@@ -222,6 +212,9 @@ def main():
                         if board.is_finished():
                             print("Game over")
                             run = False
+                if event.key == pygame.K_a:
+                    for num in range(1, 10):
+                        board.place(num)
                 if event.key == pygame.K_SPACE:
                     for i in range(9):
                         for j in range(9):
