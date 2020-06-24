@@ -147,11 +147,51 @@ def format_time(secs):
     mat = " " + str(minute) + ":" + str(sec)
     return mat
 
+def game_intro():
+    win = pygame.display.set_mode((540,600))
+    pygame.display.set_caption("Main Menu")
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                
+        win.fill((255,255,255))
+        fnt = pygame.font.SysFont("comicsans", 40)
 
-def main():
+        text = fnt.render("Select Difficulty", 1, (0,0,0))
+        win.blit(text, (155, 155))
+
+        text = fnt.render("Easy", 1, (0,0,0))
+        pygame.draw.rect(win, (0, 255, 0), (540/2 - 50, 200, 100, 40))
+        win.blit(text, (235, 205))
+
+        text = fnt.render("Normal", 1, (0,0,0))
+        pygame.draw.rect(win, (255, 255, 0), (540/2 - 50, 250, 100, 40))
+        win.blit(text, (220, 255))
+
+        text = fnt.render("Hard", 1, (0,0,0))
+        pygame.draw.rect(win, (255, 0, 0), (540/2 - 50, 300, 100, 40))
+        win.blit(text, (235, 305))
+        pygame.display.update()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                if pos[0] < 320 and pos[0] > 220 and pos[1] < 240 and pos[1] > 200:
+                    intro = False
+                    return 'easy'
+                elif pos[0] < 320 and pos[0] > 220 and pos[1] < 290 and pos[1] > 250:
+                    intro = False
+                    return 'normal'
+                elif pos[0] < 320 and pos[0] > 220 and pos[1] < 340 and pos[1] > 300:
+                    intro = False
+                    return 'hard'
+
+
+def main(difficulty):
     win = pygame.display.set_mode((540,600))
     pygame.display.set_caption("Sudoku")
-    board = Grid('hard')
+    board = Grid(difficulty)
     key = None
     run = True
     start = time.time()
@@ -236,6 +276,6 @@ def main():
         redraw_window(win, board, play_time, strikes)
         pygame.display.update()
 
-
-main()
+difficulty = game_intro()
+main(difficulty)
 pygame.quit()
